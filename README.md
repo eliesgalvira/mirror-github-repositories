@@ -1,5 +1,7 @@
 # Mirror GitHub repositories
 
+## GitLab
+
 One-time setup (do this once)
 - Generate and secure an SSH key for mirroring:
   ```bash
