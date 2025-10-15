@@ -43,7 +43,7 @@ For each GitHub source repo you want to mirror
 - MIRROR_URL
   - Value is the GitLab SSH URL, e.g.:
     ```text
-    git@gitlab.com:eliesgalvira1/REPO.git
+    git@gitlab.com:GROUP/REPO.git
     ```
 Note: Use repository secrets (not environment secrets) unless you have a specific env setup.
 
