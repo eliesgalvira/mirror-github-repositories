@@ -45,6 +45,7 @@ For each GitHub source repo you want to mirror
     ```text
     git@gitlab.com:GROUP/REPO.git
     ```
+  - If you are lazy, just copy the url and run `uv run url-mirror-gitlab.py URL` (file in this repo) and it'll paste to clipboard the right format
 Note: Use repository secrets (not environment secrets) unless you have a specific env setup.
 
 4) Add the workflow file
