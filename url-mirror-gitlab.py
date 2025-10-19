@@ -54,6 +54,7 @@ def copy_clipboard(text: str) -> bool:
 
 
 def main() -> None:
+    print("MIRROR_URL")
     if len(sys.argv) != 2:
         print(
             "Usage:\n  python url-mirror-gitlab.py https://gitlab.com/group/repo/-/tree/main",

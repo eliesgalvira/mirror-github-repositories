@@ -13,6 +13,7 @@ def osc52_copy(text: str) -> None:
 
 
 def main() -> None:
+    print("MIRROR_SSH_KEY")
     path = KEY_PATH
     if not path.is_file():
         print(f"Error: {path} not found or not a file", file=sys.stderr)
