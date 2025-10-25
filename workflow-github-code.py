@@ -75,7 +75,7 @@ def copy_clipboard(text: str) -> bool:
 
 
 def main() -> None:
-    print(".github/workglows/mirror-to-gitlab.yml")
+    print(".github/workklows/mirror-to-gitlab.yml")
     # Print to stdout so it's easy to redirect to a file if desired
     print(YAML, end="")
 
