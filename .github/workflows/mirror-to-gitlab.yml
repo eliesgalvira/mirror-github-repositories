@@ -1,24 +1,30 @@
 name: Mirror to GitLab
+
 on:
   push:
     branches: ["**"]
     tags: ["*"]
+  create:
+  delete:
 
 jobs:
   mirror:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+
     steps:
-      - name: Checkout full history
+      - name: Checkout (full history)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Start SSH agent and add deploy key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.MIRROR_SSH_KEY }}
+          log-public-key: false
 
       - name: Trust gitlab.com host
         run: |
@@ -28,15 +34,26 @@ jobs:
       - name: Configure Git safe.directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: Fetch all branches/tags
+      - name: Normalize origin and fetch everything
         run: |
+          git remote set-url origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
           git fetch --prune --tags origin
+          # Materialize each origin branch as a local branch so we can push refs/heads/*
+          git for-each-ref --format='%(refname:strip=3)' refs/remotes/origin | while read -r br; do
+            [ "$br" = "HEAD" ] && continue
+            git update-ref "refs/heads/$br" "refs/remotes/origin/$br"
+          done
 
-      - name: Push mirror to GitLab (heads/tags/notes only)
+      - name: Push to GitLab (branches/tags only)
         env:
           MIRROR_URL: ${{ secrets.MIRROR_URL }}
         run: |
           git remote remove mirror 2>/dev/null || true
           git remote add mirror "$MIRROR_URL"
+
+          # Push local branches and tags
           git push --prune mirror +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*
+
+          # Optional: notes
           git push --prune mirror +refs/notes/*:refs/notes/* || true
+
